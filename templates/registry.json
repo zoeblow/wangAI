@@ -1,0 +1,156 @@
+{
+  "files": [
+    {
+      "template": "claude/settings.json.tpl",
+      "target": ".claude/settings.json",
+      "workflows": ["claude"]
+    },
+    {
+      "template": "claude/settings.local.json.tpl",
+      "target": ".claude/settings.local.json",
+      "workflows": ["claude"]
+    },
+    {
+      "template": "claude/commands/doc.md.tpl",
+      "target": ".claude/commands/doc.md",
+      "workflows": ["claude"]
+    },
+    {
+      "template": "claude/commands/review.md.tpl",
+      "target": ".claude/commands/review.md",
+      "workflows": ["claude"]
+    },
+    {
+      "template": "claude/commands/test.md.tpl",
+      "target": ".claude/commands/test.md",
+      "workflows": ["claude"]
+    },
+    {
+      "template": "claude/agents/code-reviewer.md.tpl",
+      "target": ".claude/agents/code-reviewer.md",
+      "workflows": ["claude"]
+    },
+    {
+      "template": "claude/agents/security-auditor.md.tpl",
+      "target": ".claude/agents/security-auditor.md",
+      "workflows": ["claude"]
+    },
+    {
+      "template": "claude/agents/test-writer.md.tpl",
+      "target": ".claude/agents/test-writer.md",
+      "workflows": ["claude"]
+    },
+    {
+      "template": "claude/skills/frontend-standards/SKILL.md.tpl",
+      "target": ".claude/skills/frontend-standards/SKILL.md",
+      "workflows": ["claude"]
+    },
+
+    {
+      "template": "codex/AGENTS.md.tpl",
+      "target": ".codex/AGENTS.md",
+      "workflows": ["codex"]
+    },
+    {
+      "template": "codex/README.md.tpl",
+      "target": ".codex/README.md",
+      "workflows": ["codex"]
+    },
+    {
+      "template": "codex/config.template.toml.tpl",
+      "target": ".codex/config.template.toml",
+      "workflows": ["codex"]
+    },
+    {
+      "template": "codex/policies/permissions.md.tpl",
+      "target": ".codex/policies/permissions.md",
+      "workflows": ["codex"]
+    },
+    {
+      "template": "codex/commands/doc.md.tpl",
+      "target": ".codex/commands/doc.md",
+      "workflows": ["codex"]
+    },
+    {
+      "template": "codex/commands/review.md.tpl",
+      "target": ".codex/commands/review.md",
+      "workflows": ["codex"]
+    },
+    {
+      "template": "codex/commands/test.md.tpl",
+      "target": ".codex/commands/test.md",
+      "workflows": ["codex"]
+    },
+    {
+      "template": "codex/agents/code-reviewer.md.tpl",
+      "target": ".codex/agents/code-reviewer.md",
+      "workflows": ["codex"]
+    },
+    {
+      "template": "codex/agents/security-auditor.md.tpl",
+      "target": ".codex/agents/security-auditor.md",
+      "workflows": ["codex"]
+    },
+    {
+      "template": "codex/agents/test-writer.md.tpl",
+      "target": ".codex/agents/test-writer.md",
+      "workflows": ["codex"]
+    },
+    {
+      "template": "codex/skills/frontend-standards/SKILL.md.tpl",
+      "target": ".codex/skills/frontend-standards/SKILL.md",
+      "workflows": ["codex"]
+    },
+
+    {
+      "template": "gemini/README.md.tpl",
+      "target": ".gemini/README.md",
+      "workflows": ["gemini"]
+    },
+    {
+      "template": "gemini/settings.json.tpl",
+      "target": ".gemini/settings.json",
+      "workflows": ["gemini"]
+    },
+    {
+      "template": "gemini/settings.local.json.tpl",
+      "target": ".gemini/settings.local.json",
+      "workflows": ["gemini"]
+    },
+    {
+      "template": "gemini/commands/doc.md.tpl",
+      "target": ".gemini/commands/doc.md",
+      "workflows": ["gemini"]
+    },
+    {
+      "template": "gemini/commands/review.md.tpl",
+      "target": ".gemini/commands/review.md",
+      "workflows": ["gemini"]
+    },
+    {
+      "template": "gemini/commands/test.md.tpl",
+      "target": ".gemini/commands/test.md",
+      "workflows": ["gemini"]
+    },
+    {
+      "template": "gemini/agents/code-reviewer.md.tpl",
+      "target": ".gemini/agents/code-reviewer.md",
+      "workflows": ["gemini"]
+    },
+    {
+      "template": "gemini/agents/security-auditor.md.tpl",
+      "target": ".gemini/agents/security-auditor.md",
+      "workflows": ["gemini"]
+    },
+    {
+      "template": "gemini/agents/test-writer.md.tpl",
+      "target": ".gemini/agents/test-writer.md",
+      "workflows": ["gemini"]
+    },
+    {
+      "template": "gemini/skills/frontend-standards/SKILL.md.tpl",
+      "target": ".gemini/skills/frontend-standards/SKILL.md",
+      "workflows": ["gemini"]
+    }
+  ]
+}
