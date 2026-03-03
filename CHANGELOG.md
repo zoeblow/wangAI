@@ -7,6 +7,15 @@ All notable changes to this project will be documented in this file.
 The format is based on Keep a Changelog and this project follows Semantic Versioning.
 
 
+## [Unreleased]
+
+### Added
+- Added a GitHub Pages landing page at `docs/index.html` for project overview and quick start.
+- Excluded generated workflow folders (`.claude/`, `.golutra/`) in `.gitignore` and `.npmignore`.
+
+### Changed
+- Updated `package.json` homepage to `https://zoeblow.github.io/wangAI/`.
+
 ## [0.1.0] - 2026-03-03
 
 ### Added

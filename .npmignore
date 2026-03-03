@@ -8,6 +8,8 @@ coverage/
 dist/
 .env*
 .tmp-*/
+.claude/
+.golutra/
 templates/
 release-checklist.md
 
