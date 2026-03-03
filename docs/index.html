@@ -6,7 +6,7 @@
   <title>WangAI CLI - AI Workflow Scaffolding Tool</title>
   <meta name="description" content="CLI tool to initialize AI workflow configs for Claude, Codex, and Gemini projects.">
   <meta name="keywords" content="wangai, cli, scaffold, ai, agent, codex, claude, gemini">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
+  <link rel="icon" type="image/svg+xml" href="./assets/logo-wangai.svg">
   <style>
     :root {
       --bg: #0d1117;
@@ -96,6 +96,13 @@
       display: flex;
       align-items: center;
       gap: 8px;
+    }
+
+    .nav-logo-mark {
+      width: 24px;
+      height: 24px;
+      display: inline-block;
+      border-radius: 6px;
     }
 
     .nav-logo span {
@@ -669,7 +676,8 @@
 <nav>
   <div class="nav-inner">
     <div class="nav-logo">
-      🤖 <span>WangAI</span>
+      <img class="nav-logo-mark" src="./assets/logo-wangai.svg" alt="WangAI logo">
+      <span>WangAI</span>
     </div>
     <ul class="nav-links">
       <li><a href="#features" data-en="Features" data-zh="特性">Features</a></li>
