@@ -7,6 +7,15 @@
 格式参考 Keep a Changelog，并遵循语义化版本（SemVer）。
 
 
+## [Unreleased]
+
+### 新增
+- 新增 GitHub Pages 项目落地页：`docs/index.html`，用于展示项目简介与快速开始。
+- 在 `.gitignore` 与 `.npmignore` 中排除生成目录：`.claude/`、`.golutra/`。
+
+### 变更
+- 将 `package.json` 的 `homepage` 更新为 `https://zoeblow.github.io/wangAI/`。
+
 ## [0.1.0] - 2026-03-03
 
 ### 新增
@@ -24,4 +33,3 @@
 - 模板去除硬编码项目栈信息，改为可注入上下文。
 - Gemini 模板从仅 README 扩展为完整 settings/commands/agents/skills。
 - Codex 模板补齐 commands、policies、config 模板。
-
