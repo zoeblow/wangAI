@@ -1,0 +1,15 @@
+# `files` in package.json is the primary publish control.
+# This file is a defensive backup.
+
+.git/
+.github/
+node_modules/
+coverage/
+dist/
+.env*
+.tmp-*/
+.claude/
+.golutra/
+templates/
+release-checklist.md
+
