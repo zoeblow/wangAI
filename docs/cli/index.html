@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WangAI CLI - AI Workflow Scaffolding Tool</title>
+  <meta name="description" content="CLI tool to initialize AI workflow configs for Claude, Codex, and Gemini projects.">
+  <meta name="keywords" content="wangai, cli, scaffold, ai, agent, codex, claude, gemini">
+  <link rel="icon" type="image/svg+xml" href="./assets/logo-wangai.svg">
+  <style>
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --border: #30363d;
+      --text: #e6edf3;
+      --text-muted: #8b949e;
+      --accent: #10b981;
+      --accent-hover: #34d399;
+      --green: #3fb950;
+      --amber: #f59e0b;
+      --orange: #d29922;
+      --teal: #14b8a6;
+      --code-bg: #0d1117;
+      --gradient-start: #10b981;
+      --gradient-end: #14b8a6;
+      --nav-bg: rgba(13, 17, 23, 0.85);
+    }
+
+    [data-theme="light"] {
+      --bg: #ffffff;
+      --surface: #f6f8fa;
+      --border: #d0d7de;
+      --text: #1f2328;
+      --text-muted: #656d76;
+      --accent: #059669;
+      --accent-hover: #047857;
+      --green: #16a34a;
+      --amber: #d97706;
+      --orange: #b45309;
+      --teal: #0d9488;
+      --code-bg: #f6f8fa;
+      --gradient-start: #059669;
+      --gradient-end: #0d9488;
+      --nav-bg: rgba(255, 255, 255, 0.85);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    a:hover {
+      color: var(--accent-hover);
+    }
+
+    /* Nav */
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: var(--nav-bg);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      z-index: 100;
+      padding: 0 24px;
+    }
+
+    .nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+
+    .nav-logo {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-logo-mark {
+      width: 24px;
+      height: 24px;
+      display: inline-block;
+      border-radius: 6px;
+    }
+
+    .nav-logo span {
+      background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-muted);
+      font-size: 14px;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--text);
+    }
+
+    .nav-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 16px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 14px;
+      color: var(--text);
+      background: var(--surface);
+      transition: border-color 0.2s;
+    }
+
+    .nav-btn:hover {
+      border-color: var(--text-muted);
+      color: var(--text);
+    }
+
+    /* Hero */
+    .hero {
+      padding: 160px 24px 100px;
+      text-align: center;
+      position: relative;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 800px;
+      height: 600px;
+      background: radial-gradient(ellipse at center, rgba(16, 185, 129, 0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 32px;
+      background: var(--surface);
+    }
+
+    .hero-badge .version {
+      color: var(--green);
+      font-weight: 600;
+    }
+
+    .hero h1 {
+      font-size: clamp(40px, 6vw, 72px);
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 24px;
+      letter-spacing: -0.02em;
+    }
+
+    .hero h1 .gradient {
+      background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      font-size: 20px;
+      color: var(--text-muted);
+      max-width: 600px;
+      margin: 0 auto 48px;
+      line-height: 1.5;
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 28px;
+      background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+      color: #fff;
+      font-size: 16px;
+      font-weight: 600;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+
+    .btn-primary:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+      color: #fff;
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 28px;
+      background: var(--surface);
+      color: var(--text);
+      font-size: 16px;
+      font-weight: 600;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--text-muted);
+      transform: translateY(-1px);
+      color: var(--text);
+    }
+
+    /* Install bar */
+    .install-bar {
+      max-width: 480px;
+      margin: 48px auto 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+      font-size: 15px;
+    }
+
+    .install-bar code {
+      color: var(--green);
+    }
+
+    .install-bar code .cmd {
+      color: var(--text-muted);
+    }
+
+    .copy-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 4px;
+      transition: color 0.2s;
+      font-size: 14px;
+    }
+
+    .copy-btn:hover {
+      color: var(--text);
+    }
+
+    /* Features */
+    .features {
+      padding: 80px 24px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 36px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    .section-subtitle {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 18px;
+      margin-bottom: 56px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+    }
+
+    .feature-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .feature-card:hover {
+      border-color: var(--text-muted);
+      transform: translateY(-2px);
+    }
+
+    .feature-icon {
+      font-size: 32px;
+      margin-bottom: 16px;
+    }
+
+    .feature-card h3 {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .feature-card p {
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    /* Workflow section */
+    .workflows {
+      padding: 80px 24px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .workflow-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+
+    .workflow-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px;
+      text-align: center;
+      transition: border-color 0.2s;
+    }
+
+    .workflow-card:hover {
+      border-color: var(--accent);
+    }
+
+    .workflow-card .icon {
+      margin-bottom: 16px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .workflow-card .icon svg {
+      width: 48px;
+      height: 48px;
+    }
+
+    .workflow-card h3 {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .workflow-card p {
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .workflow-card .file-list {
+      margin-top: 16px;
+      text-align: left;
+      list-style: none;
+    }
+
+    .workflow-card .file-list li {
+      padding: 4px 0;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 13px;
+      color: var(--amber);
+    }
+
+    .workflow-card .file-list li::before {
+      content: '> ';
+      color: var(--text-muted);
+    }
+
+    /* Usage / Code section */
+    .usage {
+      padding: 80px 24px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .code-block {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+
+    .code-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 20px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+    }
+
+    .code-header span {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .code-body {
+      padding: 20px;
+      font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+      font-size: 14px;
+      line-height: 1.7;
+      overflow-x: auto;
+    }
+
+    .code-body .comment {
+      color: var(--text-muted);
+    }
+
+    .code-body .cmd {
+      color: var(--green);
+    }
+
+    .code-body .flag {
+      color: var(--orange);
+    }
+
+    .code-body .value {
+      color: var(--amber);
+    }
+
+    /* Options Table */
+    .options {
+      padding: 80px 24px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .options-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--surface);
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    .options-table th {
+      text-align: left;
+      padding: 14px 20px;
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .options-table td {
+      padding: 12px 20px;
+      font-size: 14px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .options-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .options-table code {
+      background: rgba(16, 185, 129, 0.1);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 13px;
+      color: var(--accent);
+      font-family: 'SF Mono', 'Fira Code', monospace;
+    }
+
+    /* Footer */
+    footer {
+      padding: 48px 24px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .footer-links a:hover {
+      color: var(--text);
+    }
+
+    .footer-copy {
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+
+    /* Language toggle */
+    .lang-toggle {
+      display: inline-flex;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+      font-size: 13px;
+    }
+
+    .lang-toggle button {
+      padding: 4px 12px;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 13px;
+    }
+
+    .lang-toggle button.active {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .lang-toggle button:not(.active):hover {
+      color: var(--text);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .nav-links {
+        gap: 16px;
+      }
+
+      .hero {
+        padding: 120px 16px 60px;
+      }
+
+      .hero p {
+        font-size: 16px;
+      }
+
+      .feature-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .workflow-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .install-bar {
+        margin-left: 16px;
+        margin-right: 16px;
+      }
+
+      .hero-actions {
+        flex-direction: column;
+      }
+    }
+
+    /* Theme toggle */
+    .theme-toggle {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: border-color 0.2s, color 0.2s;
+      font-size: 18px;
+      line-height: 1;
+    }
+
+    .theme-toggle:hover {
+      border-color: var(--text-muted);
+      color: var(--text);
+    }
+
+    .theme-toggle .icon-sun,
+    .theme-toggle .icon-moon {
+      display: none;
+    }
+
+    .theme-toggle .icon-moon {
+      display: inline;
+    }
+
+    [data-theme="light"] .theme-toggle .icon-moon {
+      display: none;
+    }
+
+    [data-theme="light"] .theme-toggle .icon-sun {
+      display: inline;
+    }
+
+    /* Smooth theme transition */
+    body, nav, .feature-card, .workflow-card, .code-block, .code-header,
+    .install-bar, .options-table, .hero-badge, .btn-secondary, .nav-btn,
+    .lang-toggle, .lang-toggle button, .theme-toggle, footer {
+      transition: background 0.3s, color 0.3s, border-color 0.3s;
+    }
+
+    /* Hidden class for i18n */
+    .hidden {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo">
+      <img class="nav-logo-mark" src="./assets/logo-wangai.svg" alt="WangAI logo">
+      <span>WangAI</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#features" data-en="Features" data-zh="特性">Features</a></li>
+      <li><a href="#workflows" data-en="Workflows" data-zh="工作流">Workflows</a></li>
+      <li><a href="#usage" data-en="Usage" data-zh="使用">Usage</a></li>
+      <li>
+        <div class="lang-toggle">
+          <button class="active" onclick="setLang('en')">EN</button>
+          <button onclick="setLang('zh')">中文</button>
+        </div>
+      </li>
+      <li>
+        <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">
+          <span class="icon-sun">&#9728;</span>
+          <span class="icon-moon">&#9790;</span>
+        </button>
+      </li>
+      <li>
+        <a href="https://github.com/zoeblow/wangAI" class="nav-btn" target="_blank" rel="noopener">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+          GitHub
+        </a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-badge">
+    <span data-en="Open Source" data-zh="开源项目">Open Source</span>
+    <span class="version">v0.1.0</span>
+  </div>
+  <h1>
+    <span data-en="One Command to Init" data-zh="一条命令初始化">One Command to Init</span><br>
+    <span class="gradient" data-en="AI Workflow Configs" data-zh="AI 工作流配置">AI Workflow Configs</span>
+  </h1>
+  <p data-en="Scaffold Claude, Codex, and Gemini workflow configurations for any project. Template-driven, interactive, and multilingual."
+     data-zh="为任何项目快速生成 Claude、Codex 和 Gemini 工作流配置。模板驱动、交互式、多语言支持。">
+    Scaffold Claude, Codex, and Gemini workflow configurations for any project. Template-driven, interactive, and multilingual.
+  </p>
+  <div class="hero-actions">
+    <a href="#usage" class="btn-primary" data-en="Get Started" data-zh="快速开始">Get Started</a>
+    <a href="https://github.com/zoeblow/wangAI" class="btn-secondary" target="_blank" rel="noopener">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+      <span data-en="View on GitHub" data-zh="GitHub 仓库">View on GitHub</span>
+    </a>
+  </div>
+  <div class="install-bar">
+    <code><span class="cmd">$</span> npm i -g @wangai/cli</code>
+    <button class="copy-btn" onclick="copyInstall()" title="Copy">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"/><path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"/></svg>
+    </button>
+  </div>
+</section>
+
+<!-- Features -->
+<section class="features" id="features">
+  <h2 class="section-title" data-en="Features" data-zh="核心特性">Features</h2>
+  <p class="section-subtitle" data-en="Everything you need to bootstrap AI-powered development workflows." data-zh="快速启动 AI 驱动开发工作流所需的一切。">
+    Everything you need to bootstrap AI-powered development workflows.
+  </p>
+  <div class="feature-grid">
+    <div class="feature-card">
+      <div class="feature-icon">🧩</div>
+      <h3 data-en="Template Driven" data-zh="模板驱动">Template Driven</h3>
+      <p data-en="All configs generated from templates via registry.json. Easy to customize and extend without touching CLI code."
+         data-zh="所有配置通过 registry.json 驱动的模板生成。无需修改 CLI 代码即可自定义和扩展。">
+        All configs generated from templates via registry.json. Easy to customize and extend without touching CLI code.
+      </p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">💬</div>
+      <h3 data-en="Interactive & Non-Interactive" data-zh="交互 & 非交互模式">Interactive & Non-Interactive</h3>
+      <p data-en="Use interactive prompts for guided setup, or pass all flags for CI/CD automation."
+         data-zh="交互式引导设置，或通过命令行参数实现 CI/CD 自动化。">
+        Use interactive prompts for guided setup, or pass all flags for CI/CD automation.
+      </p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🌍</div>
+      <h3 data-en="Multilingual" data-zh="多语言支持">Multilingual</h3>
+      <p data-en="Full English and Chinese support for CLI help text and interactive prompts via --lang flag."
+         data-zh="通过 --lang 参数完整支持中英文 CLI 帮助文本和交互提示。">
+        Full English and Chinese support for CLI help text and interactive prompts via --lang flag.
+      </p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">⚡</div>
+      <h3 data-en="Multi-Workflow" data-zh="多工作流">Multi-Workflow</h3>
+      <p data-en="Generate configs for Claude, Codex, Gemini, or all at once. Each workflow has purpose-built templates."
+         data-zh="一次性生成 Claude、Codex、Gemini 或全部配置。每个工作流都有专属模板。">
+        Generate configs for Claude, Codex, Gemini, or all at once. Each workflow has purpose-built templates.
+      </p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🛠️</div>
+      <h3 data-en="Stack Aware" data-zh="技术栈感知">Stack Aware</h3>
+      <p data-en="Select your stack (React, Vue, Next, Nuxt) and features (router, TypeScript, ESLint, state management)."
+         data-zh="选择技术栈（React、Vue、Next、Nuxt）和功能（路由、TypeScript、ESLint、状态管理）。">
+        Select your stack (React, Vue, Next, Nuxt) and features (router, TypeScript, ESLint, state management).
+      </p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📋</div>
+      <h3 data-en="Project Context" data-zh="项目上下文">Project Context</h3>
+      <p data-en="Inject project name, summary, framework, language, and styling info into generated configs."
+         data-zh="将项目名称、概述、框架、语言和样式方案注入生成的配置中。">
+        Inject project name, summary, framework, language, and styling info into generated configs.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- Workflows -->
+<section class="workflows" id="workflows">
+  <h2 class="section-title" data-en="Supported Workflows" data-zh="支持的工作流">Supported Workflows</h2>
+  <p class="section-subtitle" data-en="Generate config files for the AI coding assistant of your choice." data-zh="为你选择的 AI 编程助手生成配置文件。">
+    Generate config files for the AI coding assistant of your choice.
+  </p>
+  <div class="workflow-grid">
+    <div class="workflow-card">
+      <div class="icon">
+        <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="#D97757"><title>Claude</title><path d="m4.7144 15.9555 4.7174-2.6471.079-.2307-.079-.1275h-.2307l-.7893-.0486-2.6956-.0729-2.3375-.0971-2.2646-.1214-.5707-.1215-.5343-.7042.0546-.3522.4797-.3218.686.0608 1.5179.1032 2.2767.1578 1.6514.0972 2.4468.255h.3886l.0546-.1579-.1336-.0971-.1032-.0972L6.973 9.8356l-2.55-1.6879-1.3356-.9714-.7225-.4918-.3643-.4614-.1578-1.0078.6557-.7225.8803.0607.2246.0607.8925.686 1.9064 1.4754 2.4893 1.8336.3643.3035.1457-.1032.0182-.0728-.164-.2733-1.3539-2.4467-1.445-2.4893-.6435-1.032-.17-.6194c-.0607-.255-.1032-.4674-.1032-.7285L6.287.1335 6.6997 0l.9957.1336.419.3642.6192 1.4147 1.0018 2.2282 1.5543 3.0296.4553.8985.2429.8318.091.255h.1579v-.1457l.1275-1.706.2368-2.0947.2307-2.6957.0789-.7589.3764-.9107.7468-.4918.5828.2793.4797.686-.0668.4433-.2853 1.8517-.5586 2.9021-.3643 1.9429h.2125l.2429-.2429.9835-1.3053 1.6514-2.0643.7286-.8196.85-.9046.5464-.4311h1.0321l.759 1.1293-.34 1.1657-1.0625 1.3478-.8804 1.1414-1.2628 1.7-.7893 1.36.0729.1093.1882-.0183 2.8535-.607 1.5421-.2794 1.8396-.3157.8318.3886.091.3946-.3278.8075-1.967.4857-2.3072.4614-3.4364.8136-.0425.0304.0486.0607 1.5482.1457.6618.0364h1.621l3.0175.2247.7892.522.4736.6376-.079.4857-1.2142.6193-1.6393-.3886-3.825-.9107-1.3113-.3279h-.1822v.1093l1.0929 1.0686 2.0035 1.8092 2.5075 2.3314.1275.5768-.3218.4554-.34-.0486-2.2039-1.6575-.85-.7468-1.9246-1.621h-.1275v.17l.4432.6496 2.3436 3.5214.1214 1.0807-.17.3521-.6071.2125-.6679-.1214-1.3721-1.9246L14.38 17.959l-1.1414-1.9428-.1397.079-.674 7.2552-.3156.3703-.7286.2793-.6071-.4614-.3218-.7468.3218-1.4753.3886-1.9246.3157-1.53.2853-1.9004.17-.6314-.0121-.0425-.1397.0182-1.4328 1.9672-2.1796 2.9446-1.7243 1.8456-.4128.164-.7164-.3704.0667-.6618.4008-.5889 2.386-3.0357 1.4389-1.882.929-1.0868-.0062-.1579h-.0546l-6.3385 4.1164-1.1293.1457-.4857-.4554.0608-.7467.2307-.2429 1.9064-1.3114Z"/></svg>
+      </div>
+      <h3>Claude</h3>
+      <p data-en="Anthropic Claude Code workflow" data-zh="Anthropic Claude Code 工作流">Anthropic Claude Code workflow</p>
+      <ul class="file-list">
+        <li>.claude/settings.json</li>
+        <li>.claude/commands/</li>
+        <li>CLAUDE.md</li>
+      </ul>
+    </div>
+    <div class="workflow-card">
+      <div class="icon">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="#10b981" viewBox="0 0 16 16"><title>OpenAI</title><path d="M14.949 6.547a3.94 3.94 0 0 0-.348-3.273 4.11 4.11 0 0 0-4.4-1.934A4.1 4.1 0 0 0 8.423.2 4.15 4.15 0 0 0 6.305.086a4.1 4.1 0 0 0-1.891.948 4.04 4.04 0 0 0-1.158 1.753 4.1 4.1 0 0 0-1.563.679A4 4 0 0 0 .554 4.72a3.99 3.99 0 0 0 .502 4.731 3.94 3.94 0 0 0 .346 3.274 4.11 4.11 0 0 0 4.402 1.933c.382.425.852.764 1.377.995.526.231 1.095.35 1.67.346 1.78.002 3.358-1.132 3.901-2.804a4.1 4.1 0 0 0 1.563-.68 4 4 0 0 0 1.14-1.253 3.99 3.99 0 0 0-.506-4.716m-6.097 8.406a3.05 3.05 0 0 1-1.945-.694l.096-.054 3.23-1.838a.53.53 0 0 0 .265-.455v-4.49l1.366.778q.02.011.025.035v3.722c-.003 1.653-1.361 2.992-3.037 2.996m-6.53-2.75a2.95 2.95 0 0 1-.36-2.01l.095.057L5.29 12.09a.53.53 0 0 0 .527 0l3.949-2.246v1.555a.05.05 0 0 1-.022.041L6.473 13.3c-1.454.826-3.311.335-4.15-1.098m-.85-6.94A3.02 3.02 0 0 1 3.07 3.949v3.785a.51.51 0 0 0 .262.451l3.93 2.237-1.366.779a.05.05 0 0 1-.048 0L2.585 9.342a2.98 2.98 0 0 1-1.113-4.094zm11.216 2.571L8.747 5.576l1.362-.776a.05.05 0 0 1 .048 0l3.265 1.86a3 3 0 0 1 1.173 1.207 2.96 2.96 0 0 1-.27 3.2 3.05 3.05 0 0 1-1.36.997V8.279a.52.52 0 0 0-.276-.445m1.36-2.015-.097-.057-3.226-1.855a.53.53 0 0 0-.53 0L6.249 6.153V4.598a.04.04 0 0 1 .019-.04L9.533 2.7a3.07 3.07 0 0 1 3.257.139c.474.325.843.778 1.066 1.303.223.526.289 1.103.191 1.664zM5.503 8.575 4.139 7.8a.05.05 0 0 1-.026-.037V4.049c0-.57.166-1.127.476-1.607s.752-.864 1.275-1.105a3.08 3.08 0 0 1 3.234.41l-.096.054-3.23 1.838a.53.53 0 0 0-.265.455zm.742-1.577 1.758-1 1.762 1v2l-1.755 1-1.762-1z"/></svg>
+      </div>
+      <h3>Codex</h3>
+      <p data-en="OpenAI Codex CLI workflow" data-zh="OpenAI Codex CLI 工作流">OpenAI Codex CLI workflow</p>
+      <ul class="file-list">
+        <li>.codex/config.yaml</li>
+        <li>.codex/commands/</li>
+        <li>AGENTS.md</li>
+      </ul>
+    </div>
+    <div class="workflow-card">
+      <div class="icon">
+        <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="#f59e0b"><title>Google Gemini</title><path d="M11.04 19.32Q12 21.51 12 24q0-2.49.93-4.68.96-2.19 2.58-3.81t3.81-2.55Q21.51 12 24 12q-2.49 0-4.68-.93a12.3 12.3 0 0 1-3.81-2.58 12.3 12.3 0 0 1-2.58-3.81Q12 2.49 12 0q0 2.49-.96 4.68-.93 2.19-2.55 3.81a12.3 12.3 0 0 1-3.81 2.58Q2.49 12 0 12q2.49 0 4.68.96 2.19.93 3.81 2.55t2.55 3.81"/></svg>
+      </div>
+      <h3>Gemini</h3>
+      <p data-en="Google Gemini CLI workflow" data-zh="Google Gemini CLI 工作流">Google Gemini CLI workflow</p>
+      <ul class="file-list">
+        <li>.gemini/settings.json</li>
+        <li>.gemini/commands/</li>
+        <li>GEMINI.md</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- Usage -->
+<section class="usage" id="usage">
+  <h2 class="section-title" data-en="Quick Start" data-zh="快速开始">Quick Start</h2>
+  <p class="section-subtitle" data-en="Get up and running in seconds." data-zh="几秒钟即可上手。">
+    Get up and running in seconds.
+  </p>
+
+  <div class="code-block">
+    <div class="code-header">
+      <span data-en="Install globally" data-zh="全局安装">Install globally</span>
+    </div>
+    <div class="code-body">
+      <span class="comment"># Install</span><br>
+      <span class="cmd">npm i -g @wangai/cli</span><br><br>
+      <span class="comment"># Run interactive init</span><br>
+      <span class="cmd">wangai init</span><br><br>
+      <span class="comment"># Or with Chinese prompts</span><br>
+      <span class="cmd">wangai init</span> <span class="flag">--lang</span> <span class="value">zh</span>
+    </div>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header">
+      <span data-en="Non-interactive (CI/CD)" data-zh="非交互模式 (CI/CD)">Non-interactive (CI/CD)</span>
+    </div>
+    <div class="code-body">
+      <span class="cmd">wangai init</span> <span class="flag">\</span><br>
+      &nbsp;&nbsp;<span class="flag">--workflow</span> <span class="value">all</span> <span class="flag">\</span><br>
+      &nbsp;&nbsp;<span class="flag">--stack</span> <span class="value">next</span> <span class="flag">\</span><br>
+      &nbsp;&nbsp;<span class="flag">--router</span> <span class="value">y</span> <span class="flag">\</span><br>
+      &nbsp;&nbsp;<span class="flag">--ts</span> <span class="value">y</span> <span class="flag">\</span><br>
+      &nbsp;&nbsp;<span class="flag">--eslint</span> <span class="value">y</span> <span class="flag">\</span><br>
+      &nbsp;&nbsp;<span class="flag">--state</span> <span class="value">redux</span> <span class="flag">\</span><br>
+      &nbsp;&nbsp;<span class="flag">--project-name</span> <span class="value">MyProject</span> <span class="flag">\</span><br>
+      &nbsp;&nbsp;<span class="flag">--lang</span> <span class="value">zh</span> <span class="flag">\</span><br>
+      &nbsp;&nbsp;<span class="flag">--yes</span>
+    </div>
+  </div>
+</section>
+
+<!-- Options -->
+<section class="options" id="options">
+  <h2 class="section-title" data-en="CLI Options" data-zh="CLI 选项">CLI Options</h2>
+  <p class="section-subtitle" data-en="All available flags for wangai init." data-zh="wangai init 的所有可用参数。">
+    All available flags for wangai init.
+  </p>
+  <table class="options-table">
+    <thead>
+      <tr>
+        <th data-en="Option" data-zh="参数">Option</th>
+        <th data-en="Values" data-zh="可选值">Values</th>
+        <th data-en="Description" data-zh="说明">Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>--workflow</code></td>
+        <td><code>claude</code> <code>codex</code> <code>gemini</code> <code>all</code></td>
+        <td data-en="AI workflow to generate" data-zh="要生成的 AI 工作流">AI workflow to generate</td>
+      </tr>
+      <tr>
+        <td><code>--stack</code></td>
+        <td><code>react</code> <code>vue</code> <code>next</code> <code>nuxt</code></td>
+        <td data-en="Frontend stack" data-zh="前端技术栈">Frontend stack</td>
+      </tr>
+      <tr>
+        <td><code>--router</code></td>
+        <td><code>y</code> / <code>n</code></td>
+        <td data-en="Enable router" data-zh="启用路由">Enable router</td>
+      </tr>
+      <tr>
+        <td><code>--ts</code></td>
+        <td><code>y</code> / <code>n</code></td>
+        <td data-en="Enable TypeScript" data-zh="启用 TypeScript">Enable TypeScript</td>
+      </tr>
+      <tr>
+        <td><code>--eslint</code></td>
+        <td><code>y</code> / <code>n</code></td>
+        <td data-en="Enable ESLint" data-zh="启用 ESLint">Enable ESLint</td>
+      </tr>
+      <tr>
+        <td><code>--state</code></td>
+        <td data-en="e.g. redux, vuex, pinia" data-zh="如 redux、vuex、pinia">e.g. redux, vuex, pinia</td>
+        <td data-en="State management library" data-zh="状态管理库">State management library</td>
+      </tr>
+      <tr>
+        <td><code>--lang</code></td>
+        <td><code>en</code> / <code>zh</code></td>
+        <td data-en="CLI language" data-zh="CLI 语言">CLI language</td>
+      </tr>
+      <tr>
+        <td><code>--yes</code></td>
+        <td>-</td>
+        <td data-en="Skip confirmation prompts" data-zh="跳过确认提示">Skip confirmation prompts</td>
+      </tr>
+      <tr>
+        <td><code>--git-exclude</code></td>
+        <td><code>y</code> / <code>n</code></td>
+        <td data-en="Add generated dirs to .gitignore" data-zh="将生成目录添加到 .gitignore">Add generated dirs to .gitignore</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-links">
+      <a href="https://github.com/zoeblow/wangAI" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://www.npmjs.com/package/@wangai/cli" target="_blank" rel="noopener">npm</a>
+      <a href="https://github.com/zoeblow/wangAI/issues" target="_blank" rel="noopener" data-en="Issues" data-zh="问题反馈">Issues</a>
+      <a href="https://github.com/zoeblow/wangAI/blob/main/CHANGELOG.md" target="_blank" rel="noopener">Changelog</a>
+      <a href="https://github.com/zoeblow/wangAI/blob/main/LICENSE" target="_blank" rel="noopener">MIT License</a>
+    </div>
+    <p class="footer-copy">
+      &copy; 2026 <a href="https://github.com/zoeblow" target="_blank" rel="noopener">zoeblow</a>. Built with WangAI.
+    </p>
+  </div>
+</footer>
+
+<script>
+  // Theme toggle
+  function toggleTheme() {
+    const html = document.documentElement
+    const current = html.getAttribute('data-theme')
+    const next = current === 'light' ? 'dark' : 'light'
+    html.setAttribute('data-theme', next)
+    localStorage.setItem('wangai-theme', next)
+  }
+
+  // Init theme from localStorage or system preference
+  (function() {
+    const saved = localStorage.getItem('wangai-theme')
+    if (saved) {
+      document.documentElement.setAttribute('data-theme', saved)
+    } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+      document.documentElement.setAttribute('data-theme', 'light')
+    }
+  })()
+
+  // Copy install command
+  function copyInstall() {
+    navigator.clipboard.writeText('npm i -g @wangai/cli').then(() => {
+      const btn = document.querySelector('.copy-btn')
+      btn.innerHTML = '&#10003;'
+      setTimeout(() => {
+        btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"/><path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"/></svg>'
+      }, 1500)
+    })
+  }
+
+  // i18n toggle
+  function setLang(lang) {
+    document.querySelectorAll('.lang-toggle button').forEach(btn => {
+      btn.classList.toggle('active', btn.textContent.trim() === (lang === 'en' ? 'EN' : '中文'))
+    })
+    document.querySelectorAll('[data-en][data-zh]').forEach(el => {
+      el.textContent = el.getAttribute('data-' + lang)
+    })
+  }
+
+  // Smooth scroll
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault()
+      const target = document.querySelector(a.getAttribute('href'))
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }
+    })
+  })
+</script>
+
+</body>
+</html>

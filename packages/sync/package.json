@@ -1,0 +1,28 @@
+{
+  "name": "@wangai/sync",
+  "version": "0.1.0",
+  "description": "Sync AI assistant skills and agents across CLI roots with WebDAV (Jianguoyun)",
+  "bin": {
+    "wangai-sync": "./bin/wangai-sync.js"
+  },
+  "files": [
+    "bin",
+    "README.md"
+  ],
+  "type": "commonjs",
+  "scripts": {
+    "start": "node ./bin/wangai-sync.js",
+    "test": "echo \"No tests yet\""
+  },
+  "keywords": [
+    "wangai",
+    "sync",
+    "webdav",
+    "codex",
+    "claude",
+    "gemini",
+    "cursor",
+    "openclaw"
+  ],
+  "license": "MIT"
+}

@@ -1,76 +1,42 @@
-﻿# @wangai/cli
+# wangAI Monorepo
 
-[中文文档](./readme-cn.md)
+多包仓库，当前包含：
 
-CLI to initialize AI workflow configs for projects.
+- `packages/cli` -> `@wangai/cli`
+- `packages/sync` -> `@wangai/sync`
 
-## Install
+## 目录结构
 
-```bash
-npm i -g @wangai/cli
+```text
+wangAI/
+  packages/
+    cli/
+    sync/
 ```
 
-## Quick Start
+## 本地开发
 
 ```bash
-wangai --help
-wangai init
+npm install
+npm run start:cli
+npm run start:sync
 ```
 
-## Language Option
+## 文档发布（GitHub Pages /docs）
 
-You can control CLI and prompt language:
+根目录 `docs/` 作为统一入口：
+
+- `/docs/index.html`：文档导航页
+- `/docs/cli/*`：`packages/cli/docs` 同步结果
+- `/docs/sync/*`：`packages/sync/docs` 同步结果
+
+每次更新子包文档后执行：
 
 ```bash
-wangai --help --lang zh
-wangai init --lang zh
-wangai init --lang en
+npm run docs:sync
 ```
 
-## What `init` Generates
+## 发布说明
 
-Based on selected workflows:
-
-- `.claude/*`
-- `.codex/*`
-- `.gemini/*`
-- `wangai.config.json`
-
-## Interactive Options
-
-`wangai init` supports these choices:
-
-- workflow: `claude`, `codex`, `gemini`, `all`
-- stack: `react`, `vue`, `next`, `nuxt`
-- features: router, TypeScript, ESLint, state manager
-- project context: project name, summary, framework, language, styling
-
-If project context is omitted, fields are set to `待补充` and a reminder is printed.
-
-## Non-Interactive Example
-
-```bash
-wangai init --workflow all --stack next --router y --ts y --eslint y --state redux --project-name MyProject --project-summary "Internal developer platform" --framework "Next.js" --language "TypeScript" --styling "Tailwind CSS" --lang zh --git-exclude y --yes
-```
-
-## Template System
-
-Template-driven generation:
-
-- `templates/registry.json`: template-to-target mapping
-- `templates/claude/*`: Claude templates
-- `templates/codex/*`: Codex templates
-- `templates/gemini/*`: Gemini templates
-
-To update behavior:
-
-1. Edit template files under `templates/*`
-2. Update mappings in `templates/registry.json`
-3. Run `wangai init` again
-
-## Publish
-
-```bash
-npm login
-npm publish --access public
-```
+- `@wangai/cli`：在 `packages/cli` 下发布
+- `@wangai/sync`：在 `packages/sync` 下发布

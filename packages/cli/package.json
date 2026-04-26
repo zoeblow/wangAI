@@ -1,0 +1,45 @@
+﻿{
+  "name": "@wangai/cli",
+  "version": "0.1.0",
+  "description": "WangAI CLI scaffolding tool",
+  "main": "bin/wangai.js",
+  "bin": {
+    "wangai": "./bin/wangai.js"
+  },
+  "scripts": {
+    "start": "node ./bin/wangai.js",
+    "test": "echo \"No tests yet\"",
+    "changelog:new": "node ./scripts/changelog-new.js",
+    "version": "node ./scripts/changelog-version.js"
+  },
+  "files": [
+    "bin",
+    "README.md",
+    "readme-cn.md",
+    "CHANGELOG-cn.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zoeblow/wangAI.git"
+  },
+  "keywords": [
+    "cli",
+    "scaffold",
+    "ai",
+    "agent",
+    "codex",
+    "claude"
+  ],
+  "author": "",
+  "license": "MIT",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/zoeblow/wangAI/issues"
+  },
+  "homepage": "https://zoeblow.github.io/wangAI/"
+}
