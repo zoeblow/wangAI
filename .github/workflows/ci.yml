@@ -7,8 +7,11 @@ on:
   pull_request:
 
 jobs:
-  verify:
+  verify-cli:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/cli
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -19,8 +22,28 @@ jobs:
           node-version: "20"
 
       - name: Verify CLI help
-        run: node ./bin/wangai.js --help
+        run: node ./bin/wangai.js --help --lang zh
 
-      - name: Verify package payload
+      - name: Verify package payload (cli)
+        run: npm pack --dry-run
+
+  verify-sync:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/sync
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Verify sync help
+        run: npm run check
+
+      - name: Verify package payload (sync)
         run: npm pack --dry-run
 

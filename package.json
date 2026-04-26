@@ -9,6 +9,7 @@
   "scripts": {
     "start:cli": "node ./packages/cli/bin/wangai.js",
     "start:sync": "node ./packages/sync/bin/wangai-sync.js",
+    "check:sync": "cd packages/sync && npm run check && npm pack --dry-run",
     "docs:sync": "node ./scripts/sync-docs.js",
     "test": "echo \"No tests yet\""
   }

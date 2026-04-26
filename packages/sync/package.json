@@ -2,17 +2,29 @@
   "name": "@wangai/sync",
   "version": "0.1.0",
   "description": "Sync AI assistant skills and agents across CLI roots with WebDAV (Jianguoyun)",
+  "main": "bin/wangai-sync.js",
   "bin": {
     "wangai-sync": "./bin/wangai-sync.js"
   },
   "files": [
     "bin",
-    "README.md"
+    "README.md",
+    "README.zh-CN.md",
+    "CHANGELOG.md",
+    "RELEASE.md",
+    "docs"
   ],
   "type": "commonjs",
   "scripts": {
     "start": "node ./bin/wangai-sync.js",
+    "check": "node ./bin/wangai-sync.js --help --lang zh && node ./bin/wangai-sync.js --help --lang en",
     "test": "echo \"No tests yet\""
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=18"
   },
   "keywords": [
     "wangai",
@@ -24,5 +36,14 @@
     "cursor",
     "openclaw"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zoeblow/wangAI.git",
+    "directory": "packages/sync"
+  },
+  "bugs": {
+    "url": "https://github.com/zoeblow/wangAI/issues"
+  },
+  "homepage": "https://zoeblow.github.io/wangAI/sync/",
   "license": "MIT"
 }
